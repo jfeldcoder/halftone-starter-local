@@ -1,0 +1,121 @@
+@import "tailwindcss";
+
+/* ============================================================
+   Design tokens — REBRAND HERE for each client.
+   Change the hex values below; components read the tokens, so a
+   whole site re-themes from this one block.
+   ============================================================ */
+
+:root {
+  /* Base ramp — warm ivory, calm and spa-appropriate (light only by default). */
+  --bg: #fbf9f5;
+  --bg-elev: #f4f0e8;
+  --surface: #efe9df;
+  --line: #e4ddd0;
+  --fg: #23201b;
+  --fg-muted: #6a6357;
+  --fg-faint: #9a9082;
+
+  /* Accent — a warm bronze. Swap for the client's brand color. */
+  --accent: #a06a3e;
+  --accent-light: #b8824f;
+  --accent-dark: #855735;
+  --on-accent: #ffffff;
+
+  /* Motion + safe areas */
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --safe-t: env(safe-area-inset-top, 0px);
+  --safe-b: env(safe-area-inset-bottom, 0px);
+}
+
+@theme inline {
+  --color-bg: var(--bg);
+  --color-bg-elev: var(--bg-elev);
+  --color-surface: var(--surface);
+  --color-line: var(--line);
+  --color-fg: var(--fg);
+  --color-fg-muted: var(--fg-muted);
+  --color-fg-faint: var(--fg-faint);
+  --color-accent: var(--accent);
+  --color-accent-light: var(--accent-light);
+  --color-accent-dark: var(--accent-dark);
+  --color-on-accent: var(--on-accent);
+
+  --font-sans: var(--font-sans);
+  --font-display: var(--font-display);
+}
+
+* {
+  border-color: var(--line);
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--font-sans), system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+::selection {
+  background: color-mix(in srgb, var(--accent) 25%, transparent);
+}
+
+/* Small shared helpers */
+.display {
+  font-family: var(--font-display), var(--font-sans), sans-serif;
+  letter-spacing: -0.02em;
+}
+.eyebrow {
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--fg-faint);
+}
+.container-page {
+  width: 100%;
+  max-width: 72rem;
+  margin-inline: auto;
+  padding-inline: 1.25rem;
+}
+@media (min-width: 640px) {
+  .container-page {
+    padding-inline: 2rem;
+  }
+}
+
+/* On-load reveal used by <Reveal>. Content is visible by default; the animation
+   only enhances it, so no-JS and crawlers always see the content. */
+@keyframes reveal-in {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+.reveal {
+  animation: reveal-in 0.5s var(--ease-out) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  .reveal {
+    animation: none;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    transition-duration: 0.001ms !important;
+  }
+}
