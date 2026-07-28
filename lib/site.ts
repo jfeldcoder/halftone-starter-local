@@ -77,6 +77,30 @@ export const site = {
     facebook: "",
   },
 
+  // ── SEO / structured data ──
+  // Powers the LocalBusiness JSON-LD (lib/schema.ts) + metadata. Fill per client.
+  seo: {
+    // Closest schema.org type. Med spa → "HealthAndBeautyBusiness" or "MedicalBusiness";
+    // salon → "HairSalon"/"BeautySalon"; PT clinic → "PhysicalTherapy"; dentist → "Dentist".
+    schemaType: "HealthAndBeautyBusiness",
+    priceRange: "$$",
+    // Neighborhoods / cities served — helps local relevance (e.g. ["Aventura", "Sunny Isles Beach"]).
+    areaServed: [] as string[],
+    // Precise coordinates: Google Maps → right-click the pin → copy lat,long. Improves local/map.
+    geo: { latitude: "", longitude: "" },
+    // Structured address. Leave blank to fall back to the `address` string above.
+    streetAddress: "",
+    city: "",
+    region: "", // state, e.g. "FL"
+    postalCode: "",
+    country: "US",
+    // Social + share image at /public (1200x630). Used for OpenGraph + schema. Leave "" to skip.
+    image: "",
+    // ONLY set true when `rating` above is the client's REAL, verifiable Google rating.
+    // Emitting an unearned aggregateRating can get a site penalized — keep false by default.
+    includeRating: false,
+  },
+
   builtBy: { label: "Halftone", href: "https://halftone-fawn.vercel.app" },
 } as const;
 
