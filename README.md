@@ -28,19 +28,48 @@ For a simple static brochure site, use the **marketing** starter instead.
 ```
 app/
   page.tsx            hero + services menu + reviews + visit (hours/map + form)
-  layout.tsx          fonts + SEO metadata (reads lib/site.ts)
+  layout.tsx          fonts + SEO metadata + LocalBusiness JSON-LD (reads lib/site.ts)
   globals.css         warm design tokens (REBRAND HERE) + helpers
   api/inquiry/route.ts  inquiry -> email via Resend (honeypot + rate limit + validation)
   sitemap.ts / robots.ts
 components/
   Nav.tsx / Footer.tsx  nav with Book CTA; footer with hours + location
   InquiryForm.tsx       client form -> /api/inquiry
+  JsonLd.tsx            renders schema.org JSON-LD
   Reveal.tsx            on-load fade (no-JS safe)
 lib/
-  site.ts             ← single source of truth (brand, services, reviews, hours)
+  site.ts             ← single source of truth (brand, services, reviews, hours, seo)
+  schema.ts           LocalBusiness structured data (built from site.ts)
   inquiry.ts          zod schema for the form
   cn.ts
 ```
+
+## SEO — ships SEO-ready
+
+Every build gets the on-page/technical basics for free (these are what most template
+sites the clients come from are missing):
+
+- **LocalBusiness JSON-LD** (`lib/schema.ts` → injected in `layout.tsx`): name, address,
+  phone, geo, price range, area served, and opening hours — the structured data Google
+  uses for the rich result / map panel. Opening hours are parsed from `site.hours`.
+- Per-page `<title>` + meta description + canonical + OpenGraph/Twitter cards, explicit
+  `robots` allow + rich-snippet hints, `sitemap.xml`, `robots.txt`, semantic headings,
+  and fast/mobile by default (Next 16 on Vercel).
+
+**Per client — fill the `seo` block in `lib/site.ts`:** `schemaType` (pick the closest —
+`PhysicalTherapy`, `Dentist`, `HairSalon`, …), structured address, `geo` coords, `areaServed`
+neighborhoods, and add `/public/og.jpg` (1200×630). Set `NEXT_PUBLIC_SITE_URL` in Vercel.
+
+> **Honesty guardrail:** `aggregateRating` is **off by default**. Only set
+> `seo.includeRating: true` when `rating` is the client's real, verifiable Google rating —
+> a fake rating in schema can get a site penalized. Individual reviews are never emitted.
+
+**Validate after deploy:** paste the URL into Google's
+[Rich Results Test](https://search.google.com/test/rich-results), then submit the sitemap
+in Google Search Console.
+
+The ongoing local-SEO work (Google Business Profile, reviews, citations, content) is a
+separate service — the **Growth Partner** retainer, not part of the free build.
 
 ## Conventions
 
