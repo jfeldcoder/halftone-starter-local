@@ -54,7 +54,8 @@ export async function POST(req: NextRequest) {
 
   try {
     const resend = new Resend(key);
-    await resend.emails.send({
+    // The Resend SDK reports failures (limits, bad key, unverified sender) in `error` rather than throwing.
+    const { error } = await resend.emails.send({
       from,
       to,
       replyTo: email,
@@ -70,8 +71,10 @@ export async function POST(req: NextRequest) {
         .filter(Boolean)
         .join("\n"),
     });
+    if (error) throw new Error(error.message);
     return NextResponse.json({ ok: true, delivered: true });
-  } catch {
+  } catch (err) {
+    console.error("[inquiry] send failed:", err instanceof Error ? err.message : err, { name, email, phone });
     return NextResponse.json({ error: "Could not send right now. Please call or email us." }, { status: 502 });
   }
 }
